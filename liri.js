@@ -31,7 +31,13 @@ if (userInput1 === "my-tweets") {
 
 if (userInput1 === "spotify-this-song")
 	if (userInput2 === undefined) {
-		console.log("This works")
+		Spotify.search({ type: 'track', query: "The-Sign" }, function(err, data) {
+  			if (err) {
+    			return console.log('Error occurred: ' + err);
+  			}
+ 
+			console.log(data.tracks.items[0]); 
+		});
 	}
 
 	else {
@@ -41,7 +47,7 @@ if (userInput1 === "spotify-this-song")
 	    return console.log('Error occurred: ' + err);
 	  }
 	 
-	console.log(data); 
+	console.log(data.tracks.items[0]); 
 	});
 
 }
