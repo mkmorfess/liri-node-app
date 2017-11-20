@@ -15,15 +15,8 @@ var userInput2 = process.argv[3];
 
 if (userInput1 === "my-tweets") {
 
-	var params = {screen_name: 'HTownProgram'};
-	twitterKeys.get('statuses/user_timeline', params, function(error, tweets, response) {
-	  if (!error) {
-
-	  	for (var i = 0; i < tweets.length; i++) {
-	  		console.log("Tweet: '" + tweets[i].text + "' created on " + tweets[i].created_at )
-	  	}
-	  }
-	});
+		myTweets();
+	
 }
 
 
@@ -64,6 +57,50 @@ if (userInput1 === "movie-this") {
 
 }
 
+if (userInput1 === "do-what-it-says") {
+	fs.readFile("random.txt", "utf8", function(error, data) {
+
+		if (error) {
+    		return console.log(error);
+  		}
+
+  		var dataArr = data.split(", ");
+
+  		console.log(dataArr);
+
+  		for (var i = 0; i < dataArr.length; i++) {
+
+  		if (dataArr[i] === "spotify-this-song") {
+
+  				i++;
+
+  				spotifyThis(dataArr[i]);
+  				
+
+  		}
+
+  		
+
+  		if (dataArr[i] === "movie-this") {
+
+  			i++;
+
+  			movieThis(dataArr[i]);
+  			
+  		}
+
+  		if (dataArr[i] === "my-tweets") {
+
+  			myTweets();
+  			
+
+  		}
+
+  		}
+
+	})
+}
+
 
 function movieThis (input) {
 
@@ -78,10 +115,27 @@ function movieThis (input) {
             	console.log("IMDB Rating: " + JSON.parse(body).Ratings[0].Value);
             	console.log("Rotten Tomatoes: " + JSON.parse(body).Ratings[1].Value);
             	console.log("Country: " + JSON.parse(body).Country);
+            	console.log("Language: " + JSON.parse(body).Language)
             	console.log("Plot: " + JSON.parse(body).Plot);
             	console.log("Actors: " + JSON.parse(body).Actors);
 
+
+            	 
+				// fs.appendFile("log.txt", input, function(err) {
+                                   
+  		// 			if (err) {
+    // 					console.log(err);
+  		// 			}
+
+  		// 			else {
+    // 					console.log("Content Added!");
+  		// 			}
+
+				// });
+
+
 			}
+
 
 		})
 
@@ -98,6 +152,33 @@ function spotifyThis (input) {
         console.log(data.tracks.items[0].album.name);
         console.log(data.tracks.items[0].name);
         console.log(data.tracks.items[0].preview_url);	
+	});
+
+	// fs.appendFile("log.txt", input, function(err) {
+                                   
+	// 	if (err) {
+	// 		console.log(err);
+	// 	}
+
+	// 	else {
+	// 		console.log("Content Added!");
+	// 	}
+
+	// });
+
+}
+
+
+function myTweets () {
+
+		var params = {screen_name: 'HTownProgram'};
+	twitterKeys.get('statuses/user_timeline', params, function(error, tweets, response) {
+	  if (!error) {
+
+	  	for (var i = 0; i < tweets.length; i++) {
+	  		console.log("Tweet: '" + tweets[i].text + "' created on " + tweets[i].created_at )
+	  	}
+	  }
 	});
 
 }
