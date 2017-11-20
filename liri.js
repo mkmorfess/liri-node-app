@@ -6,6 +6,7 @@ var fs = require("fs");
 
 var twitterKeys = new Twitter(keys.twitter);
 var Spotify = new Spotify(keys.spotify);
+var Omdb = keys.omdb.api_key
 
 var userInput1 = process.argv[2];
 var userInput2 = process.argv[3];
@@ -29,50 +30,75 @@ if (userInput1 === "my-tweets") {
 
 //Spotify API
 
-if (userInput1 === "spotify-this-song")
+if (userInput1 === "spotify-this-song") {
+	
 	if (userInput2 === undefined) {
-		Spotify.search({ type: 'track', query: "The-Sign" }, function(err, data) {
-  			if (err) {
-    			return console.log('Error occurred: ' + err);
-  			}
- 
-			console.log(data.tracks.items[0]); 
-		});
+		
+		spotifyThis("The Sign Ace of Base");
 	}
 
 	else {
 
-	Spotify.search({ type: 'track', query: userInput2 }, function(err, data) {
-	  if (err) {
-	    return console.log('Error occurred: ' + err);
-	  }
-	 
-	console.log(data.tracks.items[0]); 
-	});
+		spotifyThis(userInput2);
 
+	}
 }
 
-else {
+
 
 //OMDB API
 
-var movieName = "Inception";
+if (userInput1 === "movie-this") {
 
-var queryUrl = "http://www.omdbapi.com/?t=" + movieName + "&y=&plot=short&apikey=40e9cece";
+	if (userInput2 === undefined) {
 
-console.log(queryUrl);
+		movieThis("mr+nobody")
+	}
 
-request(queryUrl, function (error, response, body) {
+	else {
 
-	if (!error && response.statusCode === 200) {
-
-	console.log(JSON.parse(body));
-
-	console.log("The release year for the movie is " + JSON.parse(body).Year)
+		movieThis(userInput2)
 
 	}
 
-})
+
+}
+
+
+function movieThis (input) {
+
+	var queryUrl = "http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=" + Omdb;
+
+		request(queryUrl, function (error, response, body) {
+
+			if (!error && response.statusCode === 200) {
+
+				console.log("Title: " + JSON.parse(body).Title);
+            	console.log("Year: " + JSON.parse(body).Year);
+            	console.log("IMDB Rating: " + JSON.parse(body).Ratings[0].Value);
+            	console.log("Rotten Tomatoes: " + JSON.parse(body).Ratings[1].Value);
+            	console.log("Country: " + JSON.parse(body).Country);
+            	console.log("Plot: " + JSON.parse(body).Plot);
+            	console.log("Actors: " + JSON.parse(body).Actors);
+
+			}
+
+		})
+
+}
+
+function spotifyThis (input) {
+
+	Spotify.search({ type: 'track', query: input }, function(err, data) {
+		if (err) {
+		return console.log('Error occurred: ' + err);
+		}
+	 
+		console.log(data.tracks.items[0].album.artists[0].name);
+        console.log(data.tracks.items[0].album.name);
+        console.log(data.tracks.items[0].name);
+        console.log(data.tracks.items[0].preview_url);	
+	});
 
 }
 
