@@ -16,6 +16,7 @@ var userInput2 = process.argv[3];
 if (userInput1 === "my-tweets") {
 
 		myTweets();
+		logging();
 		
 	
 }
@@ -35,6 +36,7 @@ if (userInput1 === "spotify-this-song") {
 	else {
 
 		spotifyThis(userInput2);
+		logging();
 		
 
 	}
@@ -49,12 +51,14 @@ if (userInput1 === "movie-this") {
 	if (userInput2 === undefined) {
 
 		movieThis("mr+nobody");
+		logging();
 		
 	}
 
 	else {
 
 		movieThis(userInput2);
+		logging();
 		
 
 	}
@@ -73,7 +77,7 @@ if (userInput1 === "do-what-it-says") {
 
   		var dataArr = data.split(", ");
 
-  		console.log(dataArr);
+  		// console.log(dataArr);
 
   		for (var i = 0; i < dataArr.length; i++) {
 
@@ -106,6 +110,8 @@ if (userInput1 === "do-what-it-says") {
   		}
 
 	})
+
+	logging();
 }
 
 //function for the movie API
@@ -128,7 +134,7 @@ function movieThis (input) {
             	console.log("Plot: " + JSON.parse(body).Plot);
             	console.log("Actors: " + JSON.parse(body).Actors);
 
-            	logging();
+            	
 			}
 
 
@@ -150,7 +156,7 @@ function spotifyThis (input) {
         console.log(data.tracks.items[0].name);
         console.log(data.tracks.items[0].preview_url);
 
-        logging();	
+        
 	});
 
 }
@@ -167,7 +173,7 @@ function myTweets () {
 	  		console.log("Tweet: '" + tweets[i].text + "' created on " + tweets[i].created_at )
 	  	}
 
-	  	logging();
+	  	
 	  }
 	});
 
@@ -185,15 +191,18 @@ function logging () {
 				
 			}
 
-	fs.appendFile("log.txt", userLog, function (err) {
+	
+		fs.appendFile("log.txt", userLog, function(err) {
 
-		if (!err){
+			if (!err){
 
-			console.log("Data Logged");
+				console.log("Data Logged");
 
-		}
+			}
 
-	})
+		})
+
+	
 
 }
 
