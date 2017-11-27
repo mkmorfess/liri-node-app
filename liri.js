@@ -16,6 +16,7 @@ var userInput2 = process.argv[3];
 if (userInput1 === "my-tweets") {
 
 		myTweets();
+		
 	
 }
 
@@ -28,11 +29,13 @@ if (userInput1 === "spotify-this-song") {
 	if (userInput2 === undefined) {
 		
 		spotifyThis("The Sign Ace of Base");
+		logging();
 	}
 
 	else {
 
 		spotifyThis(userInput2);
+		
 
 	}
 }
@@ -45,17 +48,21 @@ if (userInput1 === "movie-this") {
 
 	if (userInput2 === undefined) {
 
-		movieThis("mr+nobody")
+		movieThis("mr+nobody");
+		
 	}
 
 	else {
 
-		movieThis(userInput2)
+		movieThis(userInput2);
+		
 
 	}
 
 
 }
+
+//reads information from the random.txt file and runs the commands
 
 if (userInput1 === "do-what-it-says") {
 	fs.readFile("random.txt", "utf8", function(error, data) {
@@ -101,6 +108,8 @@ if (userInput1 === "do-what-it-says") {
 	})
 }
 
+//function for the movie API
+
 
 function movieThis (input) {
 
@@ -119,27 +128,15 @@ function movieThis (input) {
             	console.log("Plot: " + JSON.parse(body).Plot);
             	console.log("Actors: " + JSON.parse(body).Actors);
 
-
-            	 
-				// fs.appendFile("log.txt", input, function(err) {
-                                   
-  		// 			if (err) {
-    // 					console.log(err);
-  		// 			}
-
-  		// 			else {
-    // 					console.log("Content Added!");
-  		// 			}
-
-				// });
-
-
+            	logging();
 			}
 
 
 		})
 
 }
+
+//function for spotify API
 
 function spotifyThis (input) {
 
@@ -151,23 +148,14 @@ function spotifyThis (input) {
 		console.log(data.tracks.items[0].album.artists[0].name);
         console.log(data.tracks.items[0].album.name);
         console.log(data.tracks.items[0].name);
-        console.log(data.tracks.items[0].preview_url);	
+        console.log(data.tracks.items[0].preview_url);
+
+        logging();	
 	});
-
-	// fs.appendFile("log.txt", input, function(err) {
-                                   
-	// 	if (err) {
-	// 		console.log(err);
-	// 	}
-
-	// 	else {
-	// 		console.log("Content Added!");
-	// 	}
-
-	// });
 
 }
 
+//function for tweets
 
 function myTweets () {
 
@@ -178,8 +166,34 @@ function myTweets () {
 	  	for (var i = 0; i < tweets.length; i++) {
 	  		console.log("Tweet: '" + tweets[i].text + "' created on " + tweets[i].created_at )
 	  	}
+
+	  	logging();
 	  }
 	});
+
+}
+
+//function for logging user inputs
+
+function logging () {
+
+	var userLog = [process.argv[2], " " + process.argv[3] + ", "];
+
+	if (process.argv[3] === undefined) {
+
+			userLog = [process.argv[2] + ", "]
+				
+			}
+
+	fs.appendFile("log.txt", userLog, function (err) {
+
+		if (!err){
+
+			console.log("Data Logged");
+
+		}
+
+	})
 
 }
 
